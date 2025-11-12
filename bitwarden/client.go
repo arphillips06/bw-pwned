@@ -46,9 +46,22 @@ func GetItem(id string) (*models.BitwardenItemResponse, error) {
 
 func ListAllItems() (*models.BitwardenItemsListResponse, error) {
 	var resp models.BitwardenItemsListResponse
-	err := helper.DoRequest("GET", "http://localhost:8087/object/items", nil, &resp)
+	err := helper.DoRequest("GET", "http://localhost:8087/list/object/items", nil, &resp)
 	if err != nil {
 		return nil, err
+	}
+	for _, item := range resp.Data.Data {
+		if item.Type != 1 {
+			continue
+		}
+		if len(item.Login.URIs) == 0 {
+			continue
+		}
+		name := item.Login.URIs[0]
+		fmt.Printf("Account name: %s \n", name.URI)
+		fmt.Printf("Username: %s \n", item.Login.Username)
+		fmt.Printf("Password: %s \n", item.Login.Password)
+		fmt.Printf("\n")
 	}
 	return &resp, nil
 }
