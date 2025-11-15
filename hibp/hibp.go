@@ -9,7 +9,11 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"sync"
 )
+
+var hibpCacheMap = map[string]string{} //keys are the prefix, value is the repsponse body
+var hibpCacheMutex sync.Mutex
 
 func ShaPassword(password string) string {
 	hash := sha1.New()
@@ -28,6 +32,15 @@ func StringSplitter(hash string) (prefix, suffix string) {
 }
 
 func GetPwned(prefix string) string {
+	hibpCacheMutex.Lock()
+	value, ok := hibpCacheMap[prefix]
+	if ok {
+		hibpCacheMutex.Unlock()
+		fmt.Println("cache hit")
+		return value
+	}
+	hibpCacheMutex.Unlock()
+	fmt.Println("FETCHING FROM API:", prefix)
 	url := fmt.Sprintf("https://api.pwnedpasswords.com/range/%s", prefix)
 	resp, err := http.Get(url)
 	if err != nil {
@@ -38,7 +51,11 @@ func GetPwned(prefix string) string {
 	if err != nil {
 		log.Fatalf("Failed to read response: %v", err)
 	}
-	return string(body)
+	sbody := string(body)
+	hibpCacheMutex.Lock()
+	hibpCacheMap[prefix] = sbody
+	hibpCacheMutex.Unlock()
+	return sbody
 }
 
 func FindSuffixCount(suffix string, body string) int {
@@ -57,10 +74,10 @@ func FindSuffixCount(suffix string, body string) int {
 	return 0
 }
 
-func CheckPassword(password string) int {
+func CheckPassword(password string) (hash, prefix, suffix string, count int) {
 	sha := ShaPassword(password)
-	prefix, suffix := StringSplitter(sha)
+	prefix, suffix = StringSplitter(sha)
 	body := GetPwned(prefix)
 	getCount := FindSuffixCount(suffix, body)
-	return getCount
+	return sha, prefix, suffix, getCount
 }
