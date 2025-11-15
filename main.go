@@ -16,18 +16,16 @@ func promptMenu() int {
 
 func main() {
 	fmt.Println("Bitwarden → HIBP checker starting ...")
-	for {
-		choice := promptMenu()
-		switch choice {
-		case 1:
-			bitwarden.HandleCheckStatus()
-		case 2:
-			bitwarden.HandleGetSingleItem()
-		case 3:
-			bitwarden.HandleListAllItems()
-		default:
-			fmt.Println("Invalid choice. Exiting.")
-			return
-		}
+	choice := promptMenu()
+	switch choice {
+	case 1:
+		bitwarden.HandleCheckStatus()
+	case 2:
+		bitwarden.HandleGetSingleItem()
+	case 3:
+		bitwarden.HandleListAllItems()
+	default:
+		fmt.Println("Invalid choice. Exiting.")
 	}
+	fmt.Println("Done.")
 }
