@@ -6,6 +6,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"golang.org/x/term"
 )
 
 var reader = bufio.NewReader(os.Stdin)
@@ -19,7 +21,6 @@ func PromptInt(prompt string) int {
 		if n, err := strconv.Atoi(line); err == nil {
 			return n
 		}
-
 		fmt.Println("Invalid number. Try again.")
 	}
 }
@@ -33,7 +34,6 @@ func PromptString(prompt string) string {
 		if line != "" {
 			return line
 		}
-
 		fmt.Println("Input cannot be empty.")
 	}
 }
@@ -43,7 +43,14 @@ func PromptItemID() string {
 }
 
 func PromptPassword() string {
-	return PromptString("Enter Bitwarden password: ")
+	fmt.Print("Enter Bitwarden password: (Hidden) ")
+	pwBytes, err := term.ReadPassword(int(os.Stdin.Fd()))
+	fmt.Println()
+	if err != nil {
+		fmt.Printf("Failed to read password: %v\n", err)
+		return ""
+	}
+	return string(pwBytes)
 }
 
 func PromptYesNo(prompt string) bool {
