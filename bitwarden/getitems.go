@@ -21,13 +21,14 @@ func ensureVaultUnlocked() {
 }
 
 func HandleGetSingleItem() {
-	id := helper.PromptItemID()
 	ensureVaultUnlocked()
+	id := helper.PromptItemID()
 	item, err := GetItem(id)
 	if err != nil {
 		log.Fatalf("Get item failed: %v", err)
 	}
-	fmt.Printf("\nItem: %s\nUsername: %s\nPassword: %s\n",
+	fmt.Printf(
+		"\nItem: %s\nUsername: %s\nPassword: %s\n",
 		item.Data.Name,
 		item.Data.Login.Username,
 		item.Data.Login.Password,
@@ -36,7 +37,6 @@ func HandleGetSingleItem() {
 
 func HandleListAllItems() {
 	ensureVaultUnlocked()
-
 	if _, err := ListAllItems(); err != nil {
 		log.Fatalf("List all items failed: %v", err)
 	}
