@@ -3,7 +3,9 @@ package bitwarden
 import (
 	"bw-hibp-check/helper"
 	"bw-hibp-check/models"
+	"fmt"
 	"sort"
+	"time"
 )
 
 func sortResults(results []models.Result) {
@@ -20,7 +22,9 @@ func ListAllItems() (*models.BitwardenItemsListResponse, error) {
 	}
 	var jobs []models.Job
 	for _, item := range resp.Data.Data {
-		if item.Type != 1 || len(item.Login.URIs) == 0 {
+		if item.Type != 1 ||
+			len(item.Login.URIs) == 0 ||
+			(item.Login.Password == "" && len(item.Login.Fido2Credentials) > 0) {
 			continue
 		}
 		uri := item.Login.URIs[0].URI
@@ -31,15 +35,13 @@ func ListAllItems() (*models.BitwardenItemsListResponse, error) {
 			ItemName: item.Name,
 		})
 	}
-
+	start := time.Now()
 	results := runWorkerPool(jobs)
-
+	duration := time.Since(start)
 	sortResults(results)
-
 	printResults(results)
-
+	fmt.Printf("Scan completed in %s\n", duration.Round(time.Millisecond))
 	exportChoice := askExportChoice()
-
 	switch exportChoice {
 	case 1:
 		exportCSV(results)
@@ -47,6 +49,5 @@ func ListAllItems() (*models.BitwardenItemsListResponse, error) {
 		exportJSON(results)
 	case 3:
 	}
-
 	return &resp, nil
 }

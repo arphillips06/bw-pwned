@@ -10,11 +10,10 @@ import (
 func runWorkerPool(jobs []models.Job) []models.Result {
 	jobChan := make(chan models.Job)
 	resultChan := make(chan models.Result)
-
 	const numWorkers = 20
 	wg := &sync.WaitGroup{}
 	wg.Add(numWorkers)
-	for i := 0; i < numWorkers; i++ {
+	for i := range numWorkers {
 		go func(workerID int) {
 			for job := range jobChan {
 				hash, prefix, suffix, count := hibp.CheckPassword(job.Password)
@@ -31,7 +30,6 @@ func runWorkerPool(jobs []models.Job) []models.Result {
 					Pwned:      count > 0,
 					WorkerID:   fmt.Sprintf("worker-%d", workerID),
 				}
-
 				resultChan <- result
 			}
 			wg.Done()
@@ -39,7 +37,6 @@ func runWorkerPool(jobs []models.Job) []models.Result {
 	}
 	var all []models.Result
 	done := make(chan struct{})
-
 	go func() {
 		for r := range resultChan {
 			all = append(all, r)
@@ -55,6 +52,5 @@ func runWorkerPool(jobs []models.Job) []models.Result {
 	wg.Wait()
 	close(resultChan)
 	<-done
-
 	return all
 }

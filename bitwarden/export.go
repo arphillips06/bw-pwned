@@ -16,7 +16,6 @@ func askExportChoice() int {
 	fmt.Println("  2. JSON")
 	fmt.Println("  3. No")
 	fmt.Print("Choose [1-3]: ")
-
 	var choice int
 	fmt.Scanln(&choice)
 	return choice
@@ -27,7 +26,6 @@ func exportCSV(results []models.Result) {
 	if err := os.MkdirAll(path, 0755); err != nil {
 		log.Println(err)
 	}
-
 	filename := fmt.Sprintf("exports/hibp_results_%s.csv",
 		time.Now().Format("2006-01-02_15-04-05"),
 	)
@@ -37,9 +35,7 @@ func exportCSV(results []models.Result) {
 		return
 	}
 	defer f.Close()
-
 	f.WriteString("uri,username,password,pwned_count\n")
-
 	for _, r := range results {
 		if !r.Pwned {
 			continue
@@ -48,10 +44,8 @@ func exportCSV(results []models.Result) {
 			r.Username + "," +
 			r.Password + "," +
 			strconv.FormatUint(r.PwnedCount, 10) + "\n"
-
 		f.WriteString(line)
 	}
-
 	fmt.Println("CSV export completed:", filename)
 }
 
@@ -61,25 +55,21 @@ func exportJSON(results []models.Result) {
 		log.Println(err)
 		return
 	}
-
 	filename := fmt.Sprintf("exports/hibp_results_%s.json",
 		time.Now().Format("2006-01-02_15-04-05"),
 	)
-
 	f, err := os.Create(filename)
 	if err != nil {
 		log.Println(err)
 		return
 	}
 	defer f.Close()
-
 	type exportJSON struct {
 		URI        string `json:"uri"`
 		Username   string `json:"username"`
 		Password   string `json:"password"`
 		PwnedCount uint64 `json:"pwnedCount"`
 	}
-
 	var data []exportJSON
 	for _, r := range results {
 		if r.Pwned {
@@ -91,9 +81,7 @@ func exportJSON(results []models.Result) {
 			})
 		}
 	}
-
 	bytes, _ := json.MarshalIndent(data, "", "  ")
 	f.Write(bytes)
-
 	fmt.Println("JSON export completed:", filename)
 }
