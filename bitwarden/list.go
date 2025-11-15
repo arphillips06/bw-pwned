@@ -31,15 +31,10 @@ func ListAllItems() (*models.BitwardenItemsListResponse, error) {
 			ItemName: item.Name,
 		})
 	}
-
 	results := runWorkerPool(jobs)
-
 	sortResults(results)
-
 	printResults(results)
-
 	exportChoice := askExportChoice()
-
 	switch exportChoice {
 	case 1:
 		exportCSV(results)
@@ -47,6 +42,5 @@ func ListAllItems() (*models.BitwardenItemsListResponse, error) {
 		exportJSON(results)
 	case 3:
 	}
-
 	return &resp, nil
 }

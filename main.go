@@ -14,19 +14,15 @@ func main() {
 	fmt.Println("  2. Get single item")
 	fmt.Println("  3. List all items")
 	fmt.Print("Choose an option [1-3]: ")
-
 	var choice int
 	fmt.Scanln(&choice)
-
 	switch choice {
-
 	case 1:
 		status, err := bitwarden.GetStatus()
 		if err != nil {
 			log.Fatalf("failed to get status: %s", err)
 		}
 		fmt.Printf("Status: %s\n", status.Data.Template.Status)
-
 	case 2:
 		status, err := bitwarden.GetStatus()
 		if err != nil {
@@ -40,7 +36,6 @@ func main() {
 				log.Fatalf("failed to unlock vault: %s", err)
 			}
 		}
-
 		fmt.Print("Enter Bitwarden item ID: ")
 		var itemID string
 		fmt.Scanln(&itemID)
@@ -49,19 +44,16 @@ func main() {
 		if err != nil {
 			log.Fatalf("Get item failed: %v", err)
 		}
-
 		fmt.Printf("\nItem: %s\nUsername: %s\nPassword: %s\n",
 			item.Data.Name,
 			item.Data.Login.Username,
 			item.Data.Login.Password,
 		)
-
 	case 3:
 		status, err := bitwarden.GetStatus()
 		if err != nil {
 			log.Fatalf("failed to get status: %s", err)
 		}
-
 		if status.Data.Template.Status == "locked" {
 			password := helper.PromptPassword()
 			_, err := bitwarden.UnlockVault(password)
@@ -73,7 +65,6 @@ func main() {
 		if err != nil {
 			log.Fatalf("List all items failed: %v", err)
 		}
-
 	default:
 		fmt.Println("Invalid choice. Exiting.")
 	}

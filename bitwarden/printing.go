@@ -11,17 +11,14 @@ func printResults(results []models.Result) {
 	var choice string
 	fmt.Scanln(&choice)
 	showPw := strings.ToLower(choice) == "y"
-
 	for _, r := range results {
 		if !r.Pwned {
 			continue
 		}
-
 		pw := r.Password
 		if !showPw {
 			pw = "********"
 		}
-
 		fmt.Println("BREACHED")
 		fmt.Println("Account:", r.URI)
 		fmt.Println("Username:", r.Username)
