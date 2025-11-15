@@ -22,7 +22,9 @@ func ListAllItems() (*models.BitwardenItemsListResponse, error) {
 	}
 	var jobs []models.Job
 	for _, item := range resp.Data.Data {
-		if item.Type != 1 || len(item.Login.URIs) == 0 {
+		if item.Type != 1 ||
+			len(item.Login.URIs) == 0 ||
+			(item.Login.Password == "" && len(item.Login.Fido2Credentials) > 0) {
 			continue
 		}
 		uri := item.Login.URIs[0].URI

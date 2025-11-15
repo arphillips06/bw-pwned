@@ -61,6 +61,7 @@ type BitwardenLogin struct {
 	Password             string         `json:"password"`
 	TOTP                 *string        `json:"totp"`
 	PasswordRevisionDate *string        `json:"passwordRevisionDate"`
+	Fido2Credentials     []interface{}  `json:"fido2Credentials"`
 }
 
 type BitwardenURI struct {
