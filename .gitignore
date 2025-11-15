@@ -1,5 +1,4 @@
-exports/hibp_results_2025-11-15_11-06-15.json
-exports/hibp_results_2025-11-15_11-05-54.csv
+exports/*
 go.mod
 go.sum
 main.zip
