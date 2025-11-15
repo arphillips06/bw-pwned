@@ -1,40 +1,91 @@
 # BW-pwned
 
-This project interacts with the bitwarden and haveibeenpwned APIs to automatically check passwords that have been pwned
+BW-pwned checks the passwords in your Bitwarden vault against the **Have I Been Pwned** (HIBP) *Pwned Passwords* database using the anonymous **k-anonymous range API**.  
+No passwords are ever sent over the network — only hashed prefixes.
 
-## Use
+## Features
 
-### Prereqresites
+- Reads login items from the local Bitwarden CLI API  
+- Hashes each password (SHA-1 → upper case)  
+- Queries the HIBP `/range/{prefix}` endpoint  
+- Compares suffixes and shows breach counts  
+- Supports:
+  - checking a single item  
+  - listing all items  
+  - viewing Bitwarden status  
+- Safe/unbreached items are hidden to keep output clean  
+- No password data is stored
 
-- BW CLI
-- Go version go1.24.4 (tested)
-  - once installed, navigate to this repo's folder and run `go mod init` && `go mod tidy` to init Go and get required modules.
-- Internet access (required for the HIBP API)
+## Prerequisites
 
-### Bitwarden CLI
+- **Bitwarden CLI**  
+  Download: [Bitwarden CLI](https://bitwarden.com/help/cli/#get)
+- **Go 1.24.x** (tested)
+After cloning this repo:  
 
-This application currently uses the local Bitwarden CLI API, so the Bitwarden CLI must be installed.
-You can download it from: [bitwarden](https://bitwarden.com/help/cli/#get)
+  ```sh
+  go mod init
+  go mod tidy
+  ```
 
-A quick setup guide for Windows:
+- **Internet access** (for HIBP lookups)
 
-Details on how to use this can be found on that site, as a quick run down on Windows
+## Bitwarden CLI Setup
 
-- Download and unzip the Bitwarden CLI.
-- Open a terminal in the unzipped folder.
-- Run:
-  - `.\bw.exe login`
-  - `.\bw.eve serve`
-- (Optional) Verify login status
-  - `.\bw.eve status`
+This app relies on the *local* Bitwarden CLI API.  
+You must log in and start the local service.
 
-If items are added to the vault and you wish to check again then you must run `.\bw.exe sync` to update the BW API.
+On Windows:
 
-### Running Go app
+1. Download + unzip the Bitwarden CLI  
+2. In the extracted folder:
 
-Building is optional — the app can be run directly:
+   ```powershell
+   .\bw.exe login
+   .\bw.exe serve
+   ```
 
-`go run .`
+3. (Optional) Check login status:
 
-Run this from the directory containing main.go.
+   ```powershell
+   .\bw.exe status
+   ```
+
+4. If you’ve added items and want to re-check:
+
+   ```powershell
+   .\bw.exe sync
+   ```
+
+## Running the app
+
+No need to build — just run it:
+
+```sh
+go run .
+```
+
+You should see:
+
+```sh
+Bitwarden → HIBP checker starting...
+1. Check status
+2. Get single item
+3. List all items
+Choose an option [1-3]:
+```
+
 Follow the on-screen prompts.
+
+## Project Layout
+
+```sh
+/bitwarden       BW CLI API client logic  
+/hibp            SHA-1 hashing + HIBP range lookup  
+/models          Shared data structures  
+main.go          CLI menu + program flow
+```
+
+## License
+
+MIT — see LICENSE file.
