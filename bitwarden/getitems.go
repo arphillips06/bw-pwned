@@ -1,9 +1,10 @@
 package bitwarden
 
 import (
-	"bw-hibp-check/helper"
 	"fmt"
 	"log"
+
+	"github.com/arphillips06/BW-pwned/helper"
 )
 
 func ensureVaultUnlocked() {

@@ -1,10 +1,11 @@
 package bitwarden
 
 import (
-	"bw-hibp-check/helper"
-	"bw-hibp-check/models"
 	"fmt"
 	"log"
+
+	"github.com/arphillips06/BW-pwned/helper"
+	"github.com/arphillips06/BW-pwned/models"
 )
 
 const bwBaseURL = "http://localhost:8087"
