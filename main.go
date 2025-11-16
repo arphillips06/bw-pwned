@@ -1,9 +1,10 @@
 package main
 
 import (
-	"bw-hibp-check/bitwarden"
-	"bw-hibp-check/helper"
 	"fmt"
+
+	"github.com/arphillips06/BW-pwned/bitwarden"
+	"github.com/arphillips06/BW-pwned/helper"
 )
 
 func promptMenu() int {

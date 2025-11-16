@@ -1,11 +1,12 @@
 package bitwarden
 
 import (
-	"bw-hibp-check/helper"
-	"bw-hibp-check/models"
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/arphillips06/BW-pwned/helper"
+	"github.com/arphillips06/BW-pwned/models"
 )
 
 func printSummary(breached, safe int) {

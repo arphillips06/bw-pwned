@@ -1,8 +1,6 @@
 package bitwarden
 
 import (
-	"bw-hibp-check/helper"
-	"bw-hibp-check/models"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -10,6 +8,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/arphillips06/BW-pwned/helper"
+	"github.com/arphillips06/BW-pwned/models"
 )
 
 func ensureExportDir() {

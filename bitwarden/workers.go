@@ -1,10 +1,11 @@
 package bitwarden
 
 import (
-	"bw-hibp-check/hibp"
-	"bw-hibp-check/models"
 	"fmt"
 	"sync"
+
+	"github.com/arphillips06/BW-pwned/hibp"
+	"github.com/arphillips06/BW-pwned/models"
 )
 
 func runWorkerPool(jobs []models.Job) []models.Result {
