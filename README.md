@@ -10,7 +10,8 @@ No passwords are ever sent over the network — only hashed prefixes.
 - Queries the HIBP `/range/{prefix}` endpoint  
 - Compares suffixes and shows breach counts  
 - Supports:
-  - checking a single item  
+  - Unlocks vault when choosing to view item or list all items. 
+  - checking a single item 
   - listing all items  
   - viewing Bitwarden status  
 - Safe/unbreached items are hidden to keep output clean  
