@@ -9,6 +9,7 @@ import (
 
 func promptMenu() int {
 	fmt.Println("What do you want to do?")
+	fmt.Println("Options choosen here will unlock vault")
 	fmt.Println("  1. Check status")
 	fmt.Println("  2. Get single item")
 	fmt.Println("  3. List all items")
