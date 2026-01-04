@@ -34,6 +34,7 @@ func HandleGetSingleItem() {
 		item.Data.Login.Username,
 		item.Data.Login.Password,
 	)
+	LockVault()
 }
 
 func HandleListAllItems() {
@@ -41,4 +42,5 @@ func HandleListAllItems() {
 	if _, err := ListAllItems(); err != nil {
 		log.Fatalf("List all items failed: %v", err)
 	}
+	LockVault()
 }

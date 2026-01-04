@@ -19,8 +19,8 @@ func GetStatus() (*models.VaultStatus, error) {
 	return &resp, nil
 }
 
-func UnlockVault(password string) (*models.UnlockResponse, error) {
-	var resp models.UnlockResponse
+func UnlockVault(password string) (*models.Response, error) {
+	var resp models.Response
 	url := bwBaseURL + "/unlock"
 	body := models.UnlockRequest{Password: password}
 	if err := helper.DoRequest("POST", url, body, &resp); err != nil {
@@ -36,5 +36,16 @@ func GetItem(id string) (*models.BitwardenItemResponse, error) {
 	if err := helper.DoRequest("GET", url, nil, &resp); err != nil {
 		return nil, fmt.Errorf("get item %s failed: %w", id, err)
 	}
+	return &resp, nil
+}
+
+func LockVault() (*models.Response, error) {
+	var resp models.Response
+	url := bwBaseURL + "/lock"
+
+	if err := helper.DoRequest("POST", url, nil, &resp); err != nil {
+		return nil, fmt.Errorf("Lock vault failed: %w", err)
+	}
+	log.Printf("Locked %v | Message: %s", resp.Success, resp.Data.Title)
 	return &resp, nil
 }

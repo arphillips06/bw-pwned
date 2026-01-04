@@ -18,7 +18,7 @@ type UnlockRequest struct {
 	Password string `json:"password"`
 }
 
-type UnlockResponse struct {
+type Response struct {
 	Success bool       `json:"success"`
 	Data    UnlockData `json:"data"`
 }
